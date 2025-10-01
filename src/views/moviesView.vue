@@ -3,11 +3,13 @@ import { ref, onMounted } from 'vue';
 import api from '@/plugins/axios';
 import Loading from 'vue-loading-overlay';
 import { useGenreStore } from '@/stores/genre';
+import { useRouter } from 'vue-router';
 
 const genreStore = useGenreStore();
 const genres = ref([]);
 const movies = ref([]);
 const isLoading = ref(false);
+const router = useRouter();
 
 onMounted(async () => {
     const response = await api.get('genre/movie/list?language=pt-BR');
@@ -33,6 +35,10 @@ onMounted(async () => {
     await genreStore.getAllGenres('movie');
     isLoading.value = false;
 });
+
+function openMovie(movieId) {
+    router.push({ name: 'movieDetails', params: { id: movieId } });
+}
 </script>
 <template>
     <main>
@@ -46,7 +52,7 @@ onMounted(async () => {
         <loading v-model:active="isLoading" is-full-page></loading>
         <div class="movie-list">
             <div v-for="movie in movies" :key="movie.id" class="movie-card">
-                <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" />
+                <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" @click="openMovie(movie.id)" />
                 <div class="movie-details">
                     <p class="movie-title">{{ movie.title }}</p>
                     <p class="movie-release-date">{{ formatDate(movie.release_date) }}</p>
@@ -94,6 +100,7 @@ main {
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 2rem;
+    justify-content: center;
 }
 
 .movie-card {
