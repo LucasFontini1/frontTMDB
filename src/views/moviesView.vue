@@ -35,10 +35,10 @@ onMounted(async () => {
     await genreStore.getAllGenres('movie');
     isLoading.value = false;
 });
-
 function openMovie(movieId) {
-    router.push({ name: 'movieDetails', params: { id: movieId } });
+    router.push({ name: 'movieDetails', params: { movieId: movieId } });
 }
+
 </script>
 <template>
     <main>

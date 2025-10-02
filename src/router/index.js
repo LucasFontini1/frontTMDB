@@ -23,7 +23,7 @@ const router = createRouter({
       component: movieView,
     },
     {
-      path: '/movie/:id',
+      path: '/movie/:movieId',
       name: 'movieDetails',
       component: movieDetailsView,
       props: true,
