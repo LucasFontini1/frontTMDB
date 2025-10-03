@@ -1,23 +1,33 @@
 <script setup>
-import { defineProps, onMounted } from 'vue';
+import { defineProps, onMounted, ref } from 'vue';
 import { useTvStore } from '@/stores/tv';
+import Loading from 'vue-loading-overlay'
+import { useRouter } from 'vue-router';
 
 const tvStore = useTvStore();
-
+const isLoading = ref(false)
 const props = defineProps({
     tvId: {
         type: Number,
         required: true
     }
 })
+const router = useRouter();
 
 onMounted(async () => {
+    isLoading.value = true
     await tvStore.getTvDetails(props.tvId);
+    isLoading.value = false
 });
+
+function openSeason(tvId, seasonNumber){
+    router.push({name: 'seasonDetails', params: {tvId:tvId, seasonNumber:seasonNumber}})
+}
 </script>
 <template>
     <main>
         <div class="content">
+            <router-link class="p" to="/tv">Voltar</router-link>
             <p class="image">
                 <img :src="`https://image.tmdb.org/t/p/w185${tvStore.currentTv.poster_path}`"
                     :alt="tvStore.currentTv.name">
@@ -33,12 +43,13 @@ onMounted(async () => {
                 </li>
             </ul>
             <ul class="seasons">
-                <li v-for="season in tvStore.currentTv.seasons" :key="season.id">
+                <li @click="openSeason(props.tvId, season.season_number)" v-for="season in tvStore.currentTv.seasons" :key="season.id">
                     <h2 class="seasonName">{{ season.name }}</h2>
                     <img :src="`https://image.tmdb.org/t/p/w185${season.poster_path}`" alt="">
                 </li>
             </ul>
         </div>
+        <loading v-model:active="isLoading" is-full-page></loading>
     </main>
 </template>
 <style scoped>
@@ -47,8 +58,17 @@ onMounted(async () => {
     flex-direction: column;
     gap: 1rem;
     width: 50%;
-    margin: 0 auto;
+    margin: 2rem auto;
+
 }
+
+.p{
+    text-align: center;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: black;
+}
+
 .image {
     text-align: center;
 
@@ -120,6 +140,7 @@ ul.seasons li{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    cursor: pointer;
     
 }
 
@@ -127,6 +148,6 @@ ul.seasons li img{
     width: 100%;
     height: 90%;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 0  0  10px 10px;
 }
 </style>
