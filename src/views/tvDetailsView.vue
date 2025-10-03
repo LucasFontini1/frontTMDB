@@ -105,7 +105,9 @@ ul.genres li{
 ul.seasons{
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: space-around;
+    
 }
 ul.seasons li{
     list-style: none;
