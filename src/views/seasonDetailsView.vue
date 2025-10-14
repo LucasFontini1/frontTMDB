@@ -33,17 +33,21 @@ function openSeason(tvId, seasonNumber) {
 <template>
   <main>
     <div class="content">
+      <p class="link">
       <router-link class="p" :to="{ name: 'tvDetails', params: { tvId: props.tvId } }">Voltar</router-link>
+      </p>
         <p class="image">
-            <img :src="`https://image.tmdb.org/t/p/w185${seasonStore.currentSeason.poster_path}`" alt="">
+            <img style="width: 20rem; height: 30rem; object-fit: cover; border: 1px black solidz;" class="aw" :src="`https://image.tmdb.org/t/p/w185${seasonStore.currentSeason.poster_path}`" alt="">
         </p>
       <h1 class="tittle">{{ seasonStore.currentSeason.name }}</h1>
       <p class="overview">{{ seasonStore.currentSeason.overview }}</p>
 
       <ul class="episodes">
         <li v-for="episode in seasonStore.currentSeason.episodes" :key="episode.id">
-          <h3>{{ episode.episode_number }} - {{ episode.name }}</h3>
-          <p>{{ episode.overview }}</p>
+          <div>
+            <h3>{{ episode.episode_number }} - {{ episode.name }}</h3>
+            <p>{{ episode.overview }}</p>
+          </div>
           <img
             v-if="episode.still_path"
             :src="`https://image.tmdb.org/t/p/w300${episode.still_path}`"
@@ -58,61 +62,76 @@ function openSeason(tvId, seasonNumber) {
 </template>
 
 <style scoped>
-.content {
+.link{
+  text-align: center;
+  
+  & .p{
+    color: black;
+    text-decoration: none;
+    font-size: 2rem;
+
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}
+.content{
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  width: 60%;
-  margin: 2rem auto;
+  justify-content: center; 
+  margin: 1rem 0 1rem 0;
 }
 
-.p {
+p.image{
   text-align: center;
-  font-size: 1.5rem;
-  text-decoration: none;
-  color: black;
+
+  &.aw{
+    width: 20rem;
+  }
 }
 
-.tittle {
+
+.tittle{
+  text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
-  text-align: center;
-  color: #000;
 }
-
-.overview {
+.overview{
   text-align: center;
   font-size: 1rem;
-  color: #555;
-  margin-bottom: 2rem;
+  width: 80%;
+  margin: 0 auto;
 }
 
-ul.episodes {
+ul.episodes{
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 0;
-}
-
-ul.episodes li {
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0 2rem;
   list-style: none;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin-top: 5rem;
+
+  & li{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 32%;
+    padding: 1rem;
+    box-shadow: 0 0 0.8rem #000;
+  }
 }
 
-ul.episodes li h3 {
-  margin-bottom: 0.5rem;
+ul.episodes li h3{
+  text-align: center;
+  font-size: 2rem;
 }
 
-ul.episodes li img {
+ul.episodes li p{
+  text-align: center;
+}
+
+ul.episodes li img{
   width: 100%;
-  border-radius: 6px;
-  margin-top: 1rem;
 }
-.image{
-text-align: center;
-}
-
 </style>
